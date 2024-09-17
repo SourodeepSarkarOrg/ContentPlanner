@@ -1,0 +1,119 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Submission Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"],
+        input[type="text"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 1rem;
+            text-align: center;
+            color: green;
+        }
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Submit Your Task</h2>
+    <form id="taskForm">
+        <div class="form-group">
+            <label for="taskDuration">Task Duration (in hours):</label>
+            <input type="number" id="taskDuration" name="duration" min="0.1" step="0.1" placeholder="Enter duration" required>
+        </div>
+        <div class="form-group">
+            <label for="taskPriority">Task Priority (1 = Low, 5 = High):</label>
+            <input type="number" id="taskPriority" name="priority" min="1" max="5" placeholder="Enter priority" required>
+        </div>
+        <div class="form-group">
+            <label for="taskDeadline">Task Deadline (in hours from now):</label>
+            <input type="number" id="taskDeadline" name="deadline" min="1" placeholder="Enter deadline" required>
+        </div>
+        <input type="submit" value="Submit Task">
+    </form>
+
+    <div id="response"></div>
+</div>
+
+<script>
+    document.getElementById('taskForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const taskData = {
+            duration: document.getElementById('taskDuration').value,
+            priority: document.getElementById('taskPriority').value,
+            deadline: document.getElementById('taskDeadline').value
+        };
+
+        fetch('https://your-flask-api-url.com/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(taskData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('response').innerText = "Predicted Start Time: " + data.predicted_start_time;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+</body>
+</html>
