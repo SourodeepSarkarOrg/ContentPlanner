@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -98,7 +98,7 @@
             deadline: document.getElementById('taskDeadline').value
         };
 
-        fetch('https://your-flask-api-url.com/predict', {
+        fetch('http://127.0.0.1:5000/predict', {  // Update URL to match your Flask server
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
