@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Timetable</title>
+    <style>
+        #timetableCanvas {
+            border: 1px solid #000;
+            margin: 20px auto;
+            display: block;
+        }
+        .center-button {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form id="availabilityForm">
+        <table id="formTable">
+            <!-- Timetable form content with select inputs goes here -->
+        </table>
+        <div class="center-button">
+            <input type="submit" value="Generate Timetable">
+        </div>
+    </form>
+
+    <canvas id="timetableCanvas" width="800" height="600"></canvas>
+
+    <script>
+        document.getElementById("availabilityForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Get the canvas element
+            const canvas = document.getElementById('timetableCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set styles for the timetable
+            ctx.fillStyle = "#093A73";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "20px Poppins";
+            ctx.fillStyle = "white";
+
+            // Generate table structure
+            const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            const times = ["05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00", "08:00 - 09:00"];
+
+            // Draw the table headers
+            ctx.fillText("Time", 50, 50);
+            days.forEach((day, index) => {
+                ctx.fillText(day, 150 + index * 100, 50);
+            });
+
+            // Populate the table with user input
+            for (let i = 0; i < times.length; i++) {
+                ctx.fillText(times[i], 50, 100 + i * 50); // Time row
+                for (let j = 0; j < days.length; j++) {
+                    let userAvailability = document.querySelector(`[name="slot_${j+1}.${i+1}"]`).value;
+                    ctx.fillText(userAvailability === "available" ? "✔" : "✖", 150 + j * 100, 100 + i * 50);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
